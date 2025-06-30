@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+
+/* Fruit Card Styles */
+.fruit-card {
+  width: 500px;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.fruit-card-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+}
+
+.fruit-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.fruit-icon {
+  color: gray;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.fruit-icon:hover {
+  color: #4a5568;
+}
