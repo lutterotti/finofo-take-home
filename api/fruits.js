@@ -27,7 +27,10 @@ export default async function handler(req, res) {
       headers: {
         'x-api-key': apiKey,
         Accept: 'application/json',
-        'User-Agent': 'Vercel-Proxy/1.0',
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        Referer: 'https://finofo-take-home-ggiu.vercel.app/',
+        Origin: 'https://finofo-take-home-ggiu.vercel.app',
       },
     });
 
