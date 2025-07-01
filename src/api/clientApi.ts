@@ -119,28 +119,13 @@ const handleApiResponse = async (response: Response): Promise<Fruit[]> => {
 };
 
 export const getFruits = async (): Promise<Fruit[]> => {
-  const isLocalhost =
-    typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1');
-
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
-    let apiUrl: string;
-    let headers: HeadersInit = {};
+    const headers = createRequestHeaders(false);
 
-    if (isLocalhost) {
-      // Localhost: use the external API directly with full headers
-      apiUrl = API_BASE_URL;
-      headers = createRequestHeaders(false);
-    } else {
-      // Production: use our serverless proxy endpoint
-      apiUrl = '/api/fruits';
-    }
-
-    const response = await fetch(apiUrl, {
+    const response = await fetch(API_BASE_URL, {
       method: 'GET',
       headers,
       mode: 'cors',

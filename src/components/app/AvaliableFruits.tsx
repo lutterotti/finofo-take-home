@@ -64,7 +64,7 @@ const FruitTable = ({ fruits, jar, onAddToJar }: FruitTableProps) => {
                   size="sm"
                   aria-label="Select row"
                   checked={isInJar}
-                  onClick={e => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault();
                     onAddToJar([fruit]);
                   }}
