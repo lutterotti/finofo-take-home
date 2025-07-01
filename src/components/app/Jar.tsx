@@ -121,7 +121,7 @@ const JarListView = ({ jar, onRemoveOne }: JarListViewProps) => {
             </Text>
             <Icon
               size="sm"
-              className="fruit-icon remove-icon jar-remove-icon"
+              className="remove-icon jar-remove-icon"
               onClick={() => onRemoveOne(item.fruit)}
             >
               <BsDashCircle />
