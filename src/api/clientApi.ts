@@ -1,3 +1,4 @@
+import { Fruit } from '@/util/types';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 
@@ -23,6 +24,6 @@ const clientApi = axios.create({
 // retry the endpoint to handle the randomly thrown 500 error
 axiosRetry(clientApi, {retries: 3});
 
-export const getFruits = async (): Promise<any> => {
+export const getFruits = async (): Promise<Fruit[]> => {
     return clientApi.get(`/api/fruits`).then((response) => response.data);
 };

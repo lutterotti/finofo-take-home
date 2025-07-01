@@ -41,19 +41,37 @@
 .fruit-card {
   width: 500px;
   height: 500px;
-  overflow-y: scroll;
 }
 
 .fruit-card-header {
   position: sticky;
   top: 0;
-  background-color: white;
+  background-color: rgb(250, 234, 212);
   z-index: 10;
+  padding-bottom: var(--card-padding)
 }
 
 .fruit-item {
   padding: 8px;
   border-bottom: 1px solid #eee;
+}
+
+.fruit-item-hoverable {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.remove-icon {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fruit-item-hoverable:hover .remove-icon {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .fruit-icon {
@@ -63,5 +81,38 @@
 }
 
 .fruit-icon:hover {
+  color: #4a5568;
+}
+
+/* Add All Button Styles */
+.custom-button {
+  font-size: 12px;
+  padding: 0px 8px;
+  border: 1px solid #737373;
+  border-radius: 4px;
+  color: #737373;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.custom-button:hover {
+  background-color: #737373;
+  color: white;
+}
+
+/* View Toggle Button Styles */
+.view-toggle-button {
+  cursor: pointer;
+  color: gray;
+  transition: color 0.2s ease;
+}
+
+.view-toggle-button.active {
+  color: #3182ce;
+}
+
+.view-toggle-button:hover {
   color: #4a5568;
 }

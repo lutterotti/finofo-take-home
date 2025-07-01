@@ -5,10 +5,10 @@ export const GroupDropDown = ({options, value, onValueChange }: {options: {label
     const frameworks = createListCollection({items: options});
 
   return (
-    <Select.Root size={'sm'} collection={frameworks} value={[value]} onValueChange={(details) => onValueChange(details.value[0])} style={{ width: '200px' }}>
+    <Select.Root size={'xs'} collection={frameworks} value={[value]} onValueChange={(details) => onValueChange(details.value[0])} style={{ width: '100px' }}>
       <Select.HiddenSelect />
       <Select.Control>
-        <Select.Trigger>
+        <Select.Trigger style={{backgroundColor: 'white', color: 'black'}}>
           <Select.ValueText placeholder='Select Grouping' />
         </Select.Trigger>
         <Select.IndicatorGroup>

@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getFruits } from '../api/clientApi';
+import { Fruit } from '@/util/types';
 
 export const fetchFruits = createAsyncThunk(
   'fruitJar/fetchFruits',
@@ -12,22 +13,38 @@ export const fetchFruits = createAsyncThunk(
 export const fruitJarSlice = createSlice({
   name: 'fruitJar',
   initialState: {
-    fruits: [] as any[],
-    jar: [] as { fruit: any; count: number }[],
+    fruits: [] as Fruit[],
+    jar: [] as { fruit: Fruit; count: number }[],
     loading: false,
     },
     reducers: {
-        addToJar: (state, action) => {
+        addToJar: (state, action: PayloadAction<Fruit[]>) => {
+            const fruits = action.payload; // Array of fruits
+            console.log('Adding fruits to jar:', fruits);
+            fruits.forEach((fruit: Fruit) => {
+                const existingFruit = state.jar.find(item => item.fruit.id === fruit.id);
+                
+                if (existingFruit) {
+                    existingFruit.count += 1;
+                } else {
+                    state.jar.push({ fruit, count: 1 });
+                }
+            });
+        },
+        removeOneFromJar: (state, action: PayloadAction<Fruit>) => {
             const fruit = action.payload;
             const existingFruit = state.jar.find(item => item.fruit.id === fruit.id);
             
             if (existingFruit) {
-                existingFruit.count += 1;
-            } else {
-                state.jar.push({ fruit, count: 1 });
+                if (existingFruit.count > 1) {
+                    existingFruit.count -= 1;
+                } else {
+                    // Remove the item completely if count reaches 0
+                    state.jar = state.jar.filter(item => item.fruit.id !== fruit.id);
+                }
             }
         },
-        removeFromJar: (state, action) => {
+        removeFromJar: (state, action: PayloadAction<Fruit>) => {
             state.jar = state.jar.filter(item => item.fruit.id !== action.payload.id);
         }
     },
@@ -48,6 +65,6 @@ export const fruitJarSlice = createSlice({
     }
 });
 
-export const { addToJar, removeFromJar } = fruitJarSlice.actions;
+export const { addToJar, removeOneFromJar, removeFromJar } = fruitJarSlice.actions;
 
 export default fruitJarSlice.reducer;
