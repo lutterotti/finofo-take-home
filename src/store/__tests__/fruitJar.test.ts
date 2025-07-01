@@ -5,6 +5,7 @@ import fruitJarReducer, {
   addToJar,
   removeOneFromJar,
   removeFromJar,
+  clearError,
   fetchFruits,
 } from '../fruitJar';
 
@@ -88,6 +89,7 @@ describe('fruitJar slice', () => {
         fruits: [],
         jar: [],
         loading: false,
+        error: null,
       });
     });
   });
@@ -221,11 +223,12 @@ describe('fruitJar slice', () => {
     it('should handle fetchFruits.pending', () => {
       const action = { type: fetchFruits.pending.type };
       const state = fruitJarReducer(
-        { fruits: [], jar: [], loading: false },
+        { fruits: [], jar: [], loading: false, error: null },
         action
       );
 
       expect(state.loading).toBe(true);
+      expect(state.error).toBe(null);
     });
 
     it('should handle fetchFruits.fulfilled', () => {
@@ -235,26 +238,33 @@ describe('fruitJar slice', () => {
         payload: mockFruits,
       };
       const state = fruitJarReducer(
-        { fruits: [], jar: [], loading: true },
+        { fruits: [], jar: [], loading: true, error: null },
         action
       );
 
       expect(state.loading).toBe(false);
       expect(state.fruits).toEqual(mockFruits);
+      expect(state.error).toBe(null);
     });
 
     it('should handle fetchFruits.rejected', () => {
+      const mockError = {
+        message: 'Failed to fetch',
+        status: 500,
+        statusText: 'Internal Server Error',
+      };
       const action = {
         type: fetchFruits.rejected.type,
-        error: { message: 'Failed to fetch' },
+        payload: mockError,
       };
       const state = fruitJarReducer(
-        { fruits: [], jar: [], loading: true },
+        { fruits: [], jar: [], loading: true, error: null },
         action
       );
 
       expect(state.loading).toBe(false);
       expect(state.fruits).toEqual([]);
+      expect(state.error).toEqual(mockError);
     });
 
     it('should successfully fetch fruits from API', async () => {
@@ -317,6 +327,24 @@ describe('fruitJar slice', () => {
       const state = (store.getState() as any).fruitJar;
       expect(state.jar).toHaveLength(1);
       expect(state.jar[0].count).toBe(2);
+    });
+  });
+
+  describe('clearError action', () => {
+    it('should clear the error state', () => {
+      const initialState = {
+        fruits: [],
+        jar: [],
+        loading: false,
+        error: {
+          message: 'Test error',
+          status: 500,
+          statusText: 'Internal Server Error',
+        },
+      };
+
+      const state = fruitJarReducer(initialState, clearError());
+      expect(state.error).toBe(null);
     });
   });
 });

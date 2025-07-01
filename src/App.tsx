@@ -3,6 +3,7 @@ import './App.css';
 import { Flex } from '@chakra-ui/react';
 import { AvaliableFruits } from './components/app/AvaliableFruits';
 import { Jar } from './components/app/Jar';
+import { ErrorToast } from './components/ui/error-toast';
 import { fetchFruits, addToJar, removeFromJar } from './store/fruitJar';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { GroupByOptions } from './util/types';
@@ -31,6 +32,7 @@ export const App = () => {
 
   return (
     <div className="App">
+      <ErrorToast />
       <Flex direction="row" alignItems="center" gap={4}>
         <AvaliableFruits
           fruits={fruits}

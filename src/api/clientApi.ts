@@ -1,6 +1,6 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { Fruit } from '@/util/types';
+import { Fruit } from '../util/types';
 
 export interface TaxYearBrackets {
   tax_brackets: TaxBracket[];
@@ -10,6 +10,32 @@ export interface TaxBracket {
   min: number;
   max?: number;
   rate: number;
+}
+
+export interface ApiError {
+  message: string;
+  status?: number;
+  statusText?: string;
+  url?: string;
+}
+
+export class FruitApiError extends Error {
+  public status?: number;
+  public statusText?: string;
+  public url?: string;
+
+  constructor(
+    message: string,
+    status?: number,
+    statusText?: string,
+    url?: string
+  ) {
+    super(message);
+    this.name = 'FruitApiError';
+    this.status = status;
+    this.statusText = statusText;
+    this.url = url;
+  }
 }
 
 const clientApi = axios.create({
@@ -24,48 +50,125 @@ const clientApi = axios.create({
 // retry the endpoint to handle the randomly thrown 500 error
 axiosRetry(clientApi, { retries: 2 });
 
+const API_BASE_URL = 'https://fruity-proxy.vercel.app/api/fruits';
+const API_KEY = 'fruit-api-challenge-2025';
+const REQUEST_TIMEOUT = 20000;
+
+const createRequestHeaders = (includeUserAgent = false) => {
+  const headers: HeadersInit = {
+    'x-api-key': API_KEY,
+    Accept: 'application/json',
+    'Cache-Control': 'no-cache',
+  };
+
+  if (includeUserAgent) {
+    headers['User-Agent'] = 'Mozilla/5.0 (compatible; API-Client/1.0)';
+    headers['Pragma'] = 'no-cache';
+  }
+
+  return headers;
+};
+
+const handleApiResponse = async (response: Response): Promise<Fruit[]> => {
+  if (!response.ok) {
+    let errorMessage = `API request failed with status ${response.status}`;
+
+    try {
+      const errorText = await response.text();
+      if (errorText) {
+        errorMessage += `: ${errorText}`;
+      }
+    } catch (parseError) {
+      // If we can't parse the error response, use the status text
+      errorMessage += `: ${response.statusText}`;
+    }
+
+    throw new FruitApiError(
+      errorMessage,
+      response.status,
+      response.statusText,
+      response.url
+    );
+  }
+
+  try {
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new FruitApiError(
+        'Invalid API response: Expected an array of fruits',
+        response.status,
+        'Invalid Response Format',
+        response.url
+      );
+    }
+
+    return data;
+  } catch (error) {
+    if (error instanceof FruitApiError) {
+      throw error;
+    }
+
+    throw new FruitApiError(
+      `Failed to parse API response: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      response.status,
+      'Parse Error',
+      response.url
+    );
+  }
+};
+
 export const getFruits = async (): Promise<Fruit[]> => {
   const isLocalhost3000 =
     typeof window !== 'undefined' &&
     window.location.origin === 'http://localhost:3000';
 
-  if (isLocalhost3000) {
-    const response = await fetch('https://fruity-proxy.vercel.app/api/fruits', {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+
+  try {
+    const headers = createRequestHeaders(!isLocalhost3000);
+
+    const response = await fetch(API_BASE_URL, {
       method: 'GET',
-      headers: {
-        'x-api-key': 'fruit-api-challenge-2025',
-        Accept: 'application/json',
-        'Cache-Control': 'no-cache',
-      },
+      headers,
       mode: 'cors',
       credentials: 'omit',
+      signal: controller.signal,
     });
 
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+    clearTimeout(timeoutId);
+    return await handleApiResponse(response);
+  } catch (error) {
+    clearTimeout(timeoutId);
+
+    if (error instanceof FruitApiError) {
+      throw error;
     }
 
-    return await response.json();
-  } else {
-    const response = await fetch('https://fruity-proxy.vercel.app/api/fruits', {
-      method: 'GET',
-      headers: {
-        'x-api-key': 'fruit-api-challenge-2025',
-        'User-Agent': 'Mozilla/5.0 (compatible; API-Client/1.0)',
-        Accept: 'application/json',
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-      },
-      mode: 'cors',
-      credentials: 'omit',
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`API request failed with status ${errorText}`);
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new FruitApiError(
+        `Request timeout after ${REQUEST_TIMEOUT}ms`,
+        408,
+        'Request Timeout',
+        API_BASE_URL
+      );
     }
 
-    const data = await response.json();
-    return data;
+    if (error instanceof TypeError) {
+      throw new FruitApiError(
+        'Network error: Unable to connect to the API. Please check your internet connection.',
+        0,
+        'Network Error',
+        API_BASE_URL
+      );
+    }
+
+    throw new FruitApiError(
+      `Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      0,
+      'Unknown Error',
+      API_BASE_URL
+    );
   }
 };
