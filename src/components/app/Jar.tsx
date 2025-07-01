@@ -1,10 +1,10 @@
-import { Card, Flex, Text, Icon } from '@chakra-ui/react';
-import { Chart, useChart } from '@chakra-ui/charts';
-import { Cell, Pie, PieChart } from 'recharts';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { BsDashCircle } from 'react-icons/bs';
-import { removeOneFromJar } from '../../store/fruitJar';
 import { useState } from 'react';
+import { Chart, useChart } from '@chakra-ui/charts';
+import { Card, Flex, Text, Icon } from '@chakra-ui/react';
+import { BsDashCircle } from 'react-icons/bs';
+import { Cell, Pie, PieChart } from 'recharts';
+import { removeOneFromJar } from '../../store/fruitJar';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { ToggleView } from './ToggleView';
 
 enum viewModes {

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { fetchFruits, addToJar, removeFromJar } from './store/fruitJar';
-import { Jar } from './components/app/Jar';
-import { AvaliableFruits } from './components/app/AvaliableFruits';
 import { Flex } from '@chakra-ui/react';
+import { AvaliableFruits } from './components/app/AvaliableFruits';
+import { Jar } from './components/app/Jar';
+import { fetchFruits, addToJar, removeFromJar } from './store/fruitJar';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { GroupByOptions } from './util/types';
 
 export const App = () => {

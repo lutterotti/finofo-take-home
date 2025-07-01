@@ -1,6 +1,6 @@
-import { Fruit } from '@/util/types';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
+import { Fruit } from '@/util/types';
 
 export interface TaxYearBrackets {
   tax_brackets: TaxBracket[];

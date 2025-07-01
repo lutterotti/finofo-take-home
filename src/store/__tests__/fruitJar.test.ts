@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { getFruits } from '../../api/clientApi';
+import { Fruit } from '../../util/types';
 import fruitJarReducer, {
   addToJar,
   removeOneFromJar,
   removeFromJar,
   fetchFruits,
 } from '../fruitJar';
-import { Fruit } from '../../util/types';
 
 // Mock the API
 jest.mock('../../api/clientApi', () => ({

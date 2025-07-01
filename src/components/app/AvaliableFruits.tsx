@@ -9,9 +9,9 @@ import {
   Table,
   Text,
 } from '@chakra-ui/react';
-import { GroupDropDown } from './GroupDropDown';
 import { BsCheckCircle, BsCircle } from 'react-icons/bs';
 import { Fruit, GroupByOptions } from '../../util/types';
+import { GroupDropDown } from './GroupDropDown';
 import { ToggleView } from './ToggleView';
 
 enum viewModes {
