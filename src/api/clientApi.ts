@@ -50,7 +50,18 @@ const clientApi = axios.create({
 // retry the endpoint to handle the randomly thrown 500 error
 axiosRetry(clientApi, { retries: 2 });
 
-const API_BASE_URL = 'https://fruity-proxy.vercel.app/api/fruits';
+// Determine API URL based on environment
+const getApiUrl = (): string => {
+  // In production (deployed), use the Vercel proxy to avoid CORS
+  if (process.env.NODE_ENV === 'production') {
+    return '/api/fruits';
+  }
+
+  // In development, use the external API directly (CORS works locally)
+  return 'https://fruity-proxy.vercel.app/api/fruits';
+};
+
+const API_BASE_URL = getApiUrl();
 const API_KEY = 'fruit-api-challenge-2025';
 const REQUEST_TIMEOUT = 20000;
 

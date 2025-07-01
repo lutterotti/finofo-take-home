@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/fruits.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/fruits",
+      "destination": "/api/fruits.js"
+    }
+  ]
+}
