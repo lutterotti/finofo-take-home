@@ -119,15 +119,21 @@ const handleApiResponse = async (response: Response): Promise<Fruit[]> => {
 };
 
 export const getFruits = async (): Promise<Fruit[]> => {
-  const isLocalhost3000 =
+  const isLocalhost =
     typeof window !== 'undefined' &&
-    window.location.origin === 'http://localhost:3000';
+    (window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1');
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
-    const headers = createRequestHeaders(!isLocalhost3000);
+    // Use different header strategies:
+    // Localhost: full headers work fine with the API CORS settings
+    // Production: minimal headers to avoid triggering CORS preflight
+    const headers = isLocalhost
+      ? createRequestHeaders(false)
+      : { 'x-api-key': API_KEY };
 
     const response = await fetch(API_BASE_URL, {
       method: 'GET',
