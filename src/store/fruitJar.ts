@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getFruits } from '../api/clientApi';
-import { Fruit } from '@/util/types';
+import { Fruit } from '../util/types';
 
 export const fetchFruits = createAsyncThunk(
   'fruitJar/fetchFruits',

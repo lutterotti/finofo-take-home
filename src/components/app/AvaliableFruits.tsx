@@ -2,9 +2,14 @@ import { Accordion, Card, Checkbox, Flex, Icon, Span, Table, Text } from "@chakr
 import { useMemo, useState } from "react";
 import { GroupDropDown } from "./GroupDropDown";
 import { BsCheckCircle, BsCircle, BsGrid3X2, BsListUl } from "react-icons/bs";
-import { Fruit } from "@/util/types";
+import { Fruit, GroupByOptions } from "../../util/types";
 
-const filterOptions = [{label: 'None', value: 'none'}, {label: 'Family', value: 'family'}, {label: 'Order', value: 'order'}, {label: 'Genus', value: 'genus'}];
+enum viewModes {
+  LIST = 'list',
+  GRID = 'grid'
+}
+
+const filterOptions = [{label: 'None', value: GroupByOptions.NONE}, {label: 'Family', value: GroupByOptions.FAMILY}, {label: 'Order', value: GroupByOptions.ORDER}, {label: 'Genus', value: GroupByOptions.GENUS}];
 
 const FruitTable = ({ fruits, jar, onAddToJar }: { 
   fruits: Fruit[], 
@@ -26,7 +31,7 @@ const FruitTable = ({ fruits, jar, onAddToJar }: {
         </Table.Header>
         <Table.Body>
           {fruits.map((fruit: Fruit) => {
-            const isInJar = jar.some(item => item.fruit.id === fruit.id);
+            const isInJar = jar.some((item) => item.fruit.id === fruit.id);
             return (
               <Table.Row key={fruit.id}>
                 <Table.Cell>
@@ -58,23 +63,23 @@ const FruitTable = ({ fruits, jar, onAddToJar }: {
 
 export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, jar }: { 
   fruits: Fruit[], 
-  groupBy: string, 
-  onGroupByChange: (value: string) => void, 
+  groupBy: GroupByOptions, 
+  onGroupByChange: (value: GroupByOptions) => void, 
   onAddToJar: (fruit: Fruit[]) => void, 
   onRemoveFromJar: (fruit: Fruit) => void,
   jar: { fruit: Fruit; count: number }[] 
 }) => {
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [viewMode, setViewMode] = useState<viewModes.LIST | viewModes.GRID>(viewModes.LIST);
   // Group fruits based on the selected grouping
   const groupedFruits = useMemo(() => {
-    if (groupBy === 'none' || !fruits.length) {
+    if (groupBy === GroupByOptions.NONE || !fruits.length) {
       return [{ title: 'All Fruits', fruits: fruits }];
     }
 
     const groups: { [key: string]: Fruit[] } = {};
     
     fruits.forEach(fruit => {
-      const groupKey = (fruit as any)[groupBy] || 'Unknown';
+      const groupKey = (fruit)[groupBy] || 'Unknown';
       if (!groups[groupKey]) {
         groups[groupKey] = [];
       }
@@ -96,15 +101,15 @@ export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, 
             <Flex gap='2'>
               <Icon 
                 size='sm' 
-                className={`view-toggle-button ${viewMode === 'list' ? 'active' : ''}`}
-                onClick={() => setViewMode('list')}
+                className={`view-toggle-button ${viewMode === viewModes.LIST ? 'active' : ''}`}
+                onClick={() => setViewMode(viewModes.LIST)}
               >
                 <BsListUl />
               </Icon>
               <Icon 
                 size='sm' 
-                className={`view-toggle-button ${viewMode === 'grid' ? 'active' : ''}`}
-                onClick={() => setViewMode('grid')}
+                className={`view-toggle-button ${viewMode === viewModes.GRID ? 'active' : ''}`}
+                onClick={() => setViewMode(viewModes.GRID)}
               >
                 <BsGrid3X2 />
               </Icon>
@@ -114,13 +119,13 @@ export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, 
         </Flex>
       </Card.Header>
       <Card.Body style={{overflowY: 'scroll'}}>
-        <Accordion.Root multiple defaultValue={groupBy === 'none' ? ['group-0'] : []}>
+        <Accordion.Root multiple defaultValue={groupBy === GroupByOptions.NONE ? ['group-0'] : []}>
         {groupedFruits.map((group, index) => (
           <Accordion.Item key={index} value={`group-${index}`}>
             <Accordion.ItemTrigger>
               <Flex flex='1' alignItems='center' justifyContent='space-between'>
                 <Span><b>{group.title}</b> ({group.fruits.length})</Span>
-                {groupBy !== 'none' && (
+                {groupBy !== GroupByOptions.NONE && (
                   <div
                     className="custom-button"
                     onClick={(e) => {
@@ -136,7 +141,7 @@ export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, 
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>
-                {viewMode === 'grid' ? (
+                {viewMode === viewModes.GRID ? (
                   <FruitTable fruits={group.fruits} jar={jar} onAddToJar={onAddToJar}  />
                 ) : (
                   group.fruits.map((fruit, fruitIndex) => {

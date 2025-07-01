@@ -1,11 +1,12 @@
 import { createListCollection, Portal, Select } from "@chakra-ui/react"
+import { GroupByOptions } from "../../util/types"
 
-export const GroupDropDown = ({options, value, onValueChange }: {options: {label: string, value: string}[], value: string, onValueChange: (value: string) => void }) => {
+export const GroupDropDown = ({options, value, onValueChange }: {options: {label: string, value: GroupByOptions}[], value: GroupByOptions, onValueChange: (value: GroupByOptions) => void }) => {
 
     const frameworks = createListCollection({items: options});
 
   return (
-    <Select.Root size={'xs'} collection={frameworks} value={[value]} onValueChange={(details) => onValueChange(details.value[0])} style={{ width: '100px' }}>
+    <Select.Root size={'xs'} collection={frameworks} value={[value]} onValueChange={(details) => onValueChange(details.value[0] as GroupByOptions)} style={{ width: '100px' }}>
       <Select.HiddenSelect />
       <Select.Control>
         <Select.Trigger style={{backgroundColor: 'white', color: 'black'}}>

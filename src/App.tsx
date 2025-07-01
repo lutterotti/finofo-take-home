@@ -5,13 +5,14 @@ import { fetchFruits, addToJar, removeFromJar } from './store/fruitJar';
 import { Jar } from './components/app/Jar';
 import { AvaliableFruits } from './components/app/AvaliableFruits';
 import { Flex } from '@chakra-ui/react';
+import { GroupByOptions } from './util/types';
 
 
 export const App = () => {
   const dispatch = useAppDispatch();
   const { loading, fruits, jar } = useAppSelector(state => state.fruitJar);
   const hasFetched = useRef(false);
-  const [groupBy, setGroupBy] = useState('none');
+  const [groupBy, setGroupBy] = useState<GroupByOptions>(GroupByOptions.NONE);
 
   const handleAddToJar = (fruit: any) => {
     dispatch(addToJar(fruit));

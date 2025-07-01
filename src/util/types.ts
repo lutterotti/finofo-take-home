@@ -15,3 +15,10 @@ export type Fruit = {
         sugar: number;
     };
 }
+
+export enum GroupByOptions {
+    NONE = 'none',
+    FAMILY = 'family',
+    ORDER = 'order',
+    GENUS = 'genus'
+  }
