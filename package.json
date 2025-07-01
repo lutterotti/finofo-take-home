@@ -48,7 +48,7 @@
       "import"
     ],
     "rules": {
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
       "import/order": [
         "error",
         {
