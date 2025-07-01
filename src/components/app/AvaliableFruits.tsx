@@ -1,8 +1,9 @@
 import { Accordion, Card, Checkbox, Flex, Icon, Span, Table, Text } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { GroupDropDown } from "./GroupDropDown";
-import { BsCheckCircle, BsCircle, BsGrid3X2, BsListUl } from "react-icons/bs";
+import { BsCheckCircle, BsCircle } from "react-icons/bs";
 import { Fruit, GroupByOptions } from "../../util/types";
+import { ToggleView } from "./ToggleView";
 
 enum viewModes {
   LIST = 'list',
@@ -70,6 +71,12 @@ export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, 
   jar: { fruit: Fruit; count: number }[] 
 }) => {
   const [viewMode, setViewMode] = useState<viewModes.LIST | viewModes.GRID>(viewModes.LIST);
+  
+  const viewOptions = [
+    { value: viewModes.LIST, label: 'List' },
+    { value: viewModes.GRID, label: 'Table' }
+  ];
+
   // Group fruits based on the selected grouping
   const groupedFruits = useMemo(() => {
     if (groupBy === GroupByOptions.NONE || !fruits.length) {
@@ -98,22 +105,12 @@ export const AvaliableFruits = ({ fruits, groupBy, onGroupByChange, onAddToJar, 
         <Flex alignItems='flex-start' flexDirection='column' gap='1' justifyContent={'space-between'}>
           <Flex alignItems='center' justifyContent='space-between' width='100%'>
             <Text fontWeight='bold'>Fruits In-Stock</Text>
-            <Flex gap='2'>
-              <Icon 
-                size='sm' 
-                className={`view-toggle-button ${viewMode === viewModes.LIST ? 'active' : ''}`}
-                onClick={() => setViewMode(viewModes.LIST)}
-              >
-                <BsListUl />
-              </Icon>
-              <Icon 
-                size='sm' 
-                className={`view-toggle-button ${viewMode === viewModes.GRID ? 'active' : ''}`}
-                onClick={() => setViewMode(viewModes.GRID)}
-              >
-                <BsGrid3X2 />
-              </Icon>
-            </Flex>
+            <ToggleView
+              value={viewMode}
+              onValueChange={(value) => setViewMode(value as viewModes.LIST | viewModes.GRID)}
+              options={viewOptions}
+              size="sm"
+            />
           </Flex>
           <GroupDropDown options={filterOptions} value={groupBy} onValueChange={onGroupByChange} />
         </Flex>
