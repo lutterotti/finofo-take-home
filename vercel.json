@@ -1,13 +1,7 @@
 {
   "functions": {
     "api/fruits.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/fruits",
-      "destination": "/api/fruits.js"
-    }
-  ]
+  }
 }

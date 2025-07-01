@@ -50,18 +50,7 @@ const clientApi = axios.create({
 // retry the endpoint to handle the randomly thrown 500 error
 axiosRetry(clientApi, { retries: 2 });
 
-// Determine API URL based on environment
-const getApiUrl = (): string => {
-  // In production (deployed), use the Vercel proxy to avoid CORS
-  if (process.env.NODE_ENV === 'production') {
-    return '/api/fruits';
-  }
-
-  // In development, use the external API directly (CORS works locally)
-  return 'https://fruity-proxy.vercel.app/api/fruits';
-};
-
-const API_BASE_URL = getApiUrl();
+const API_BASE_URL = 'https://fruity-proxy.vercel.app/api/fruits';
 const API_KEY = 'fruit-api-challenge-2025';
 const REQUEST_TIMEOUT = 20000;
 
@@ -163,6 +152,21 @@ export const getFruits = async (): Promise<Fruit[]> => {
     }
 
     if (error instanceof TypeError) {
+      // Check if this might be a CORS error
+      const errorMessage = error.message.toLowerCase();
+      if (
+        errorMessage.includes('cors') ||
+        errorMessage.includes('network') ||
+        errorMessage.includes('fetch')
+      ) {
+        throw new FruitApiError(
+          'CORS Error: This application requires direct API access which may be blocked by your browser in production. The app works fully in development mode. Consider using a CORS browser extension or try a different browser.',
+          0,
+          'CORS Error',
+          API_BASE_URL
+        );
+      }
+
       throw new FruitApiError(
         'Network error: Unable to connect to the API. Please check your internet connection.',
         0,
