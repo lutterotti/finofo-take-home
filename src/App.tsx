@@ -7,7 +7,6 @@ import { AvaliableFruits } from './components/app/AvaliableFruits';
 import { Flex } from '@chakra-ui/react';
 import { GroupByOptions } from './util/types';
 
-
 export const App = () => {
   const dispatch = useAppDispatch();
   const { loading, fruits, jar } = useAppSelector(state => state.fruitJar);
@@ -31,11 +30,18 @@ export const App = () => {
   }, [dispatch, loading, fruits.length]);
 
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <Flex direction='row' alignItems='center' gap={4}>
+    <div className="App">
+      <header className="App-header">
+        <Flex direction="row" alignItems="center" gap={4}>
           <Jar />
-          <AvaliableFruits fruits={fruits} groupBy={groupBy} onGroupByChange={setGroupBy} onAddToJar={handleAddToJar} onRemoveFromJar={handleRemoveFromJar} jar={jar} />
+          <AvaliableFruits
+            fruits={fruits}
+            groupBy={groupBy}
+            onGroupByChange={setGroupBy}
+            onAddToJar={handleAddToJar}
+            onRemoveFromJar={handleRemoveFromJar}
+            jar={jar}
+          />
         </Flex>
       </header>
     </div>

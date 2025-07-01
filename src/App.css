@@ -48,7 +48,7 @@
   top: 0;
   background-color: rgb(250, 234, 212);
   z-index: 10;
-  padding-bottom: var(--card-padding)
+  padding-bottom: var(--card-padding);
 }
 
 .fruit-item {
@@ -65,13 +65,17 @@
 .remove-icon {
   opacity: 0;
   transform: scale(0.8);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .fruit-item-hoverable:hover .remove-icon {
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .fruit-icon {

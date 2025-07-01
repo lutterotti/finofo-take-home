@@ -1,4 +1,4 @@
-import { SegmentGroup } from "@chakra-ui/react"
+import { SegmentGroup } from '@chakra-ui/react';
 
 interface ToggleViewProps {
   value: string;
@@ -7,27 +7,32 @@ interface ToggleViewProps {
     value: string;
     label: string;
   }>;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
-export const ToggleView = ({ value, onValueChange, options, size = "sm" }: ToggleViewProps) => {
+export const ToggleView = ({
+  value,
+  onValueChange,
+  options,
+  size = 'sm',
+}: ToggleViewProps) => {
   return (
-    <SegmentGroup.Root 
-      size={size} 
+    <SegmentGroup.Root
+      size={size}
       value={value}
-      onValueChange={(details) => {
+      onValueChange={details => {
         if (details.value) {
           onValueChange(details.value);
         }
       }}
     >
       <SegmentGroup.Indicator />
-      <SegmentGroup.Items 
+      <SegmentGroup.Items
         items={options.map(option => ({
           value: option.value,
-          label: option.label
-        }))} 
+          label: option.label,
+        }))}
       />
     </SegmentGroup.Root>
-  )
-}
+  );
+};
