@@ -7,6 +7,16 @@ import { removeOneFromJar } from '../../store/fruitJar';
 import { useState } from 'react';
 import { ToggleView } from './ToggleView';
 
+enum viewModes {
+  LIST = 'list',
+  CHART = 'chart',
+}
+
+const viewOptions = [
+  { value: viewModes.LIST, label: 'List' },
+  { value: viewModes.CHART, label: 'Chart' },
+];
+
 const JarChartView = () => {
   const { jar } = useAppSelector(state => state.fruitJar);
 
@@ -41,15 +51,18 @@ const JarChartView = () => {
         </PieChart>
       </Chart.Root>
       {/* Legend */}
-      <Flex direction="column" gap="1" mt="4">
+      <Flex
+        direction="column"
+        gap="1"
+        mt="4"
+        className="chart-legend-scrollable"
+      >
         {chartData.map(item => (
           <Flex key={item.name} alignItems="center" gap="2" fontSize="sm">
             <div
+              className="chart-legend-indicator"
               style={{
-                width: '12px',
-                height: '12px',
                 backgroundColor: item.color,
-                borderRadius: '2px',
               }}
             />
             <Text flex="1">{item.name}</Text>
@@ -96,8 +109,7 @@ const JarListView = () => {
             </Text>
             <Icon
               size="sm"
-              className="fruit-icon remove-icon"
-              style={{ color: 'red', cursor: 'pointer' }}
+              className="fruit-icon remove-icon jar-remove-icon"
               onClick={() => handleRemoveOne(item.fruit)}
             >
               <BsDashCircle />
@@ -110,24 +122,28 @@ const JarListView = () => {
 };
 
 export const Jar = () => {
-  const [viewMode, setViewMode] = useState<'list' | 'chart'>('list');
+  const [viewMode, setViewMode] = useState<viewModes.LIST | viewModes.CHART>(
+    viewModes.LIST
+  );
   const { jar } = useAppSelector(state => state.fruitJar);
 
-  const viewOptions = [
-    { value: 'list', label: 'List' },
-    { value: 'chart', label: 'Chart' },
-  ];
-
   return (
-    <Card.Root variant="elevated" className="fruit-card">
-      <Card.Header className="fruit-card-header">
-        <Flex alignItems="flex-start" justifyContent="space-between">
-          <Flex alignItems="flex-start" flexDirection="column" gap="1">
+    <Card.Root variant="elevated" className="jar-card">
+      <Card.Header className="custom-card-header">
+        <Flex
+          alignItems="flex-start"
+          flexDirection="column"
+          gap="1"
+          justifyContent="space-between"
+        >
+          <Flex alignItems="center" justifyContent="space-between" width="100%">
             <Text fontWeight="bold">Your Jar</Text>
             {jar.length > 0 && (
               <ToggleView
                 value={viewMode}
-                onValueChange={value => setViewMode(value as 'list' | 'chart')}
+                onValueChange={value =>
+                  setViewMode(value as viewModes.LIST | viewModes.CHART)
+                }
                 options={viewOptions}
                 size="sm"
               />
@@ -142,12 +158,12 @@ export const Jar = () => {
           </Text>
         </Flex>
       </Card.Header>
-      <Card.Body style={{ overflowY: 'scroll' }}>
+      <Card.Body className="scroll-body">
         {jar.length === 0 ? (
           <Text color="gray.500" textAlign="center" padding="4">
             Your jar is empty. Add some fruits!
           </Text>
-        ) : viewMode === 'list' ? (
+        ) : viewMode === viewModes.LIST ? (
           <JarListView />
         ) : (
           <JarChartView />

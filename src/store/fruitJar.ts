@@ -20,7 +20,6 @@ export const fruitJarSlice = createSlice({
   reducers: {
     addToJar: (state, action: PayloadAction<Fruit[]>) => {
       const fruits = action.payload; // Array of fruits
-      console.log('Adding fruits to jar:', fruits);
       fruits.forEach((fruit: Fruit) => {
         const existingFruit = state.jar.find(
           item => item.fruit.id === fruit.id
@@ -56,12 +55,10 @@ export const fruitJarSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchFruits.fulfilled, (state, action) => {
-        console.log('Fruits fetched successfully:', action.payload);
         state.fruits = action.payload;
         state.loading = false;
       })
       .addCase(fetchFruits.rejected, (state, action) => {
-        console.error('Failed to fetch fruits:', action.error.message);
         state.loading = false;
       });
   },

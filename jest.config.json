@@ -1,0 +1,5 @@
+{
+  "jest": {
+    "transformIgnorePatterns": ["node_modules/(?!(axios|axios-retry)/)"]
+  }
+}

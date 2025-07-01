@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import {
   Accordion,
   Card,
@@ -8,7 +9,6 @@ import {
   Table,
   Text,
 } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
 import { GroupDropDown } from './GroupDropDown';
 import { BsCheckCircle, BsCircle } from 'react-icons/bs';
 import { Fruit, GroupByOptions } from '../../util/types';
@@ -127,8 +127,8 @@ export const AvaliableFruits = ({
   }, [fruits, groupBy]);
 
   return (
-    <Card.Root variant="elevated" className="fruit-card">
-      <Card.Header className="fruit-card-header">
+    <Card.Root variant="elevated" className="custom-card">
+      <Card.Header className="custom-card-header">
         <Flex
           alignItems="flex-start"
           flexDirection="column"

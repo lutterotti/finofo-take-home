@@ -1,19 +1,5 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,26 +10,18 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Fruit Card Styles */
-.fruit-card {
+.custom-card {
+  width: 600px;
+  height: 500px;
+}
+
+.jar-card {
   width: 500px;
   height: 500px;
 }
 
-.fruit-card-header {
+.custom-card-header {
   position: sticky;
   top: 0;
   background-color: rgb(250, 234, 212);
@@ -119,4 +97,51 @@
 
 .view-toggle-button:hover {
   color: #4a5568;
+}
+
+/* Chart Legend Styles */
+.chart-legend-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Remove Icon Styles */
+.jar-remove-icon {
+  color: red;
+  cursor: pointer;
+}
+
+/* Scroll Body Styles */
+.scroll-body {
+  overflow-y: scroll;
+}
+
+/* Chart Legend Scrollable Styles */
+.chart-legend-scrollable {
+  max-height: 120px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: #f6f6f6;
+}
+
+.chart-legend-scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chart-legend-scrollable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.chart-legend-scrollable::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.chart-legend-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }

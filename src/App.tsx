@@ -31,19 +31,17 @@ export const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <Flex direction="row" alignItems="center" gap={4}>
-          <Jar />
-          <AvaliableFruits
-            fruits={fruits}
-            groupBy={groupBy}
-            onGroupByChange={setGroupBy}
-            onAddToJar={handleAddToJar}
-            onRemoveFromJar={handleRemoveFromJar}
-            jar={jar}
-          />
-        </Flex>
-      </header>
+      <Flex direction="row" alignItems="center" gap={4}>
+        <AvaliableFruits
+          fruits={fruits}
+          groupBy={groupBy}
+          onGroupByChange={setGroupBy}
+          onAddToJar={handleAddToJar}
+          onRemoveFromJar={handleRemoveFromJar}
+          jar={jar}
+        />
+        <Jar />
+      </Flex>
     </div>
   );
 };
