@@ -10,9 +10,24 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { BsCheckCircle, BsCircle } from 'react-icons/bs';
-import { Fruit, GroupByOptions } from '../../util/types';
+import { Fruit, GroupByOptions, JarItem } from '../../util/types';
 import { GroupDropDown } from './GroupDropDown';
 import { ToggleView } from './ToggleView';
+
+interface FruitTableProps {
+  fruits: Fruit[];
+  jar: JarItem[];
+  onAddToJar: (fruit: Fruit[]) => void;
+}
+
+interface AvailableFruitsProps {
+  fruits: Fruit[];
+  groupBy: GroupByOptions;
+  onGroupByChange: (value: GroupByOptions) => void;
+  onAddToJar: (fruit: Fruit[]) => void;
+  onRemoveFromJar: (fruit: Fruit) => void;
+  jar: JarItem[];
+}
 
 enum viewModes {
   LIST = 'list',
@@ -26,15 +41,7 @@ const filterOptions = [
   { label: 'Genus', value: GroupByOptions.GENUS },
 ];
 
-const FruitTable = ({
-  fruits,
-  jar,
-  onAddToJar,
-}: {
-  fruits: Fruit[];
-  jar: { fruit: Fruit; count: number }[];
-  onAddToJar: (fruit: Fruit[]) => void;
-}) => {
+const FruitTable = ({ fruits, jar, onAddToJar }: FruitTableProps) => {
   return (
     <Table.Root size="sm" interactive>
       <Table.Header>
@@ -87,14 +94,7 @@ export const AvaliableFruits = ({
   onGroupByChange,
   onAddToJar,
   jar,
-}: {
-  fruits: Fruit[];
-  groupBy: GroupByOptions;
-  onGroupByChange: (value: GroupByOptions) => void;
-  onAddToJar: (fruit: Fruit[]) => void;
-  onRemoveFromJar: (fruit: Fruit) => void;
-  jar: { fruit: Fruit; count: number }[];
-}) => {
+}: AvailableFruitsProps) => {
   const [viewMode, setViewMode] = useState<viewModes.LIST | viewModes.GRID>(
     viewModes.LIST
   );

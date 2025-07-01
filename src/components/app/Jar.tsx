@@ -5,23 +5,42 @@ import { BsDashCircle } from 'react-icons/bs';
 import { Cell, Pie, PieChart } from 'recharts';
 import { removeOneFromJar } from '../../store/fruitJar';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { Fruit, JarItem } from '../../util/types';
 import { ToggleView } from './ToggleView';
+
+interface ChartDataItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
+interface JarChartViewProps {
+  jar: JarItem[];
+}
+
+interface JarListViewProps {
+  jar: JarItem[];
+  onRemoveOne: (fruit: Fruit) => void;
+}
+
+interface ViewOption {
+  value: string;
+  label: string;
+}
 
 enum viewModes {
   LIST = 'list',
   CHART = 'chart',
 }
 
-const viewOptions = [
+const viewOptions: ViewOption[] = [
   { value: viewModes.LIST, label: 'List' },
   { value: viewModes.CHART, label: 'Chart' },
 ];
 
-const JarChartView = () => {
-  const { jar } = useAppSelector(state => state.fruitJar);
-
+const JarChartView = ({ jar }: JarChartViewProps) => {
   // Transform jar data into chart data
-  const chartData = jar.map((item, index) => {
+  const chartData: ChartDataItem[] = jar.map((item, index) => {
     const totalCalories = (item.fruit.nutritions?.calories || 0) * item.count;
     return {
       name: item.fruit.name,
@@ -74,14 +93,7 @@ const JarChartView = () => {
   );
 };
 
-const JarListView = () => {
-  const { jar } = useAppSelector(state => state.fruitJar);
-  const dispatch = useAppDispatch();
-
-  const handleRemoveOne = (fruit: any) => {
-    dispatch(removeOneFromJar(fruit));
-  };
-
+const JarListView = ({ jar, onRemoveOne }: JarListViewProps) => {
   return (
     <>
       {jar.map((item, index) => (
@@ -110,7 +122,7 @@ const JarListView = () => {
             <Icon
               size="sm"
               className="fruit-icon remove-icon jar-remove-icon"
-              onClick={() => handleRemoveOne(item.fruit)}
+              onClick={() => onRemoveOne(item.fruit)}
             >
               <BsDashCircle />
             </Icon>
@@ -126,6 +138,11 @@ export const Jar = () => {
     viewModes.LIST
   );
   const { jar } = useAppSelector(state => state.fruitJar);
+  const dispatch = useAppDispatch();
+
+  const handleRemoveOne = (fruit: Fruit) => {
+    dispatch(removeOneFromJar(fruit));
+  };
 
   return (
     <Card.Root variant="elevated" className="jar-card">
@@ -164,9 +181,9 @@ export const Jar = () => {
             Your jar is empty. Add some fruits!
           </Text>
         ) : viewMode === viewModes.LIST ? (
-          <JarListView />
+          <JarListView jar={jar} onRemoveOne={handleRemoveOne} />
         ) : (
-          <JarChartView />
+          <JarChartView jar={jar} />
         )}
       </Card.Body>
     </Card.Root>

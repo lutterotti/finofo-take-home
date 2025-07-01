@@ -16,6 +16,11 @@ export type Fruit = {
   };
 };
 
+export type JarItem = {
+  fruit: Fruit;
+  count: number;
+};
+
 export enum GroupByOptions {
   NONE = 'none',
   FAMILY = 'family',

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getFruits } from '../api/clientApi';
-import { Fruit } from '../util/types';
+import { Fruit, JarItem } from '../util/types';
 
 export const fetchFruits = createAsyncThunk(
   'fruitJar/fetchFruits',
@@ -14,7 +14,7 @@ export const fruitJarSlice = createSlice({
   name: 'fruitJar',
   initialState: {
     fruits: [] as Fruit[],
-    jar: [] as { fruit: Fruit; count: number }[],
+    jar: [] as JarItem[],
     loading: false,
   },
   reducers: {

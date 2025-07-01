@@ -1,15 +1,17 @@
 import { createListCollection, Portal, Select } from '@chakra-ui/react';
 import { GroupByOptions } from '../../util/types';
 
+interface GroupDropDownProps {
+  options: { label: string; value: GroupByOptions }[];
+  value: GroupByOptions;
+  onValueChange: (value: GroupByOptions) => void;
+}
+
 export const GroupDropDown = ({
   options,
   value,
   onValueChange,
-}: {
-  options: { label: string; value: GroupByOptions }[];
-  value: GroupByOptions;
-  onValueChange: (value: GroupByOptions) => void;
-}) => {
+}: GroupDropDownProps) => {
   const frameworks = createListCollection({ items: options });
 
   return (

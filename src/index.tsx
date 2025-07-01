@@ -1,11 +1,11 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { Provider } from 'react-redux';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store/store';
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
