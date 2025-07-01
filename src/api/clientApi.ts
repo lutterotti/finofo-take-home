@@ -128,14 +128,19 @@ export const getFruits = async (): Promise<Fruit[]> => {
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
-    // Use different header strategies:
-    // Localhost: full headers work fine with the API CORS settings
-    // Production: minimal headers to avoid triggering CORS preflight
-    const headers = isLocalhost
-      ? createRequestHeaders(false)
-      : { 'x-api-key': API_KEY };
+    let apiUrl: string;
+    let headers: HeadersInit = {};
 
-    const response = await fetch(API_BASE_URL, {
+    if (isLocalhost) {
+      // Localhost: use the external API directly with full headers
+      apiUrl = API_BASE_URL;
+      headers = createRequestHeaders(false);
+    } else {
+      // Production: use our serverless proxy endpoint
+      apiUrl = '/api/fruits';
+    }
+
+    const response = await fetch(apiUrl, {
       method: 'GET',
       headers,
       mode: 'cors',
