@@ -5,6 +5,7 @@ import {
   Checkbox,
   Flex,
   Icon,
+  Input,
   Span,
   Table,
   Text,
@@ -98,7 +99,7 @@ export const AvaliableFruits = ({
   const [viewMode, setViewMode] = useState<viewModes.LIST | viewModes.GRID>(
     viewModes.LIST
   );
-
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const viewOptions = [
     { value: viewModes.LIST, label: 'List' },
     { value: viewModes.GRID, label: 'Table' },
@@ -106,14 +107,19 @@ export const AvaliableFruits = ({
 
   // Group fruits based on the selected grouping
   const groupedFruits = useMemo(() => {
-    if (groupBy === GroupByOptions.NONE || !fruits.length) {
-      return [{ title: 'All Fruits', fruits: fruits }];
+    const filteredFruits = fruits.filter(fruit =>
+      fruit.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (groupBy === GroupByOptions.NONE || !filteredFruits.length) {
+      return [{ title: 'All Fruits', fruits: filteredFruits }];
     }
 
     const groups: { [key: string]: Fruit[] } = {};
 
-    fruits.forEach(fruit => {
-      const groupKey = fruit[groupBy] || 'Unknown';
+    filteredFruits.forEach(fruit => {
+      const groupKey = fruit[groupBy].trim() || 'Unknown';
+
       if (!groups[groupKey]) {
         groups[groupKey] = [];
       }
@@ -124,7 +130,7 @@ export const AvaliableFruits = ({
       title: groupName,
       fruits: groupFruits,
     }));
-  }, [fruits, groupBy]);
+  }, [fruits, groupBy, searchTerm]);
 
   return (
     <Card.Root variant="elevated" className="custom-card">
@@ -150,6 +156,13 @@ export const AvaliableFruits = ({
             options={filterOptions}
             value={groupBy}
             onValueChange={onGroupByChange}
+          />
+          <Input
+            name="searchFruit"
+            onChange={e => {
+              console.log(e.target.value);
+              setSearchTerm(e.target.value);
+            }}
           />
         </Flex>
       </Card.Header>
